@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   battlefieldConfig: {fileID: 11400000, guid: a66e3797c3fd0194d8cd1fbdc81b8e2a, type: 2}
-  padding: 1
+  padding: 0.5
   centerOnBattlefield: 1
 --- !u!1 &711276111
 GameObject:

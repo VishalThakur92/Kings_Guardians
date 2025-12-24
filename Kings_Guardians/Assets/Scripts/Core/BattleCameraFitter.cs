@@ -24,7 +24,7 @@ namespace KingGuardians.Core
 
         [Header("Padding (world units)")]
         [Tooltip("Extra space around the battlefield so towers are not at the very edge.")]
-        [Min(0f)][SerializeField] private float padding = 1.0f;
+        [Min(0f)][SerializeField] private float padding = 0f;
 
         [Header("Behavior")]
         [Tooltip("If true, centers camera to (0,0). Keep true for MVP.")]
