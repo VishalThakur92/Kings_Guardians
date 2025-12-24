@@ -294,8 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca81b1c0baeeeea439c35f84f3d9cb71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainTowerPrefab: {fileID: 0}
-  outpostPrefab: {fileID: 0}
+  mainTowerPrefab: {fileID: 7726508594080007860, guid: 5805f848e17af204485de657d581140e, type: 3}
+  outpostPrefab: {fileID: 7726508594080007860, guid: d3f193568f10d6a42af73c374082fc52, type: 3}
   towersRoot: {fileID: 0}
 --- !u!4 &385288957
 Transform:

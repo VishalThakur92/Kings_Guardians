@@ -3,46 +3,51 @@ using UnityEngine;
 namespace KingGuardians.Core
 {
     /// <summary>
-    /// Pure data describing the battlefield layout.
-    /// Keep this free of scene references so it can be reused in tests and future server simulation.
+    /// Battlefield layout data for a PORTRAIT game:
+    /// - Combat flows along the Y axis (bottom -> top).
+    /// - Lanes are vertical columns separated along the X axis.
+    /// - Deployment zones are separated by horizontal boundary lines (Y).
     /// </summary>
     [CreateAssetMenu(menuName = "KingGuardians/Configs/Battlefield Config", fileName = "BattlefieldConfig")]
     public sealed class BattlefieldConfig : ScriptableObject
     {
-        [Header("Lane Layout")]
+        [Header("Lane Layout (Portrait)")]
         [Tooltip("Number of lanes (MVP: 2).")]
         [Min(1)] public int LaneCount = 2;
 
-        [Tooltip("Distance between lane center lines (world units).")]
-        [Min(0.1f)] public float LaneSpacing = 3.5f;
+        [Tooltip("Distance between lane center columns along X (world units).")]
+        [Min(0.1f)] public float LaneSpacing = 3.0f;
 
-        [Tooltip("Half-length of the arena along the X axis. Units typically move +X or -X.")]
-        [Min(1f)] public float HalfArenaLength = 10f;
+        [Tooltip("Half-width of the arena along the X axis.")]
+        [Min(1f)] public float HalfArenaWidth = 5f;
 
-        [Header("Deploy Zones")]
-        [Tooltip("Players can only deploy on their side. This is the X boundary for the friendly deploy zone.")]
-        public float FriendlyDeployMaxX = -1f; // For Player A (left side) in local mode
+        [Tooltip("Half-height of the arena along the Y axis. Units move bottom->top.")]
+        [Min(1f)] public float HalfArenaHeight = 10f;
 
-        [Tooltip("For Player B (right side) in local mode.")]
-        public float EnemyDeployMinX = 1f;
+        [Header("Deploy Zones (Portrait)")]
+        [Tooltip("Player deploy zone ends at this Y (boundary line). Player side is below this line.")]
+        public float PlayerDeployMaxY = -1f;
 
-        [Header("Towers")]
-        [Tooltip("Local-side main tower position (Player A).")]
-        public Vector2 PlayerMainTowerPos = new Vector2(-9f, 0f);
+        [Tooltip("Enemy deploy zone starts at this Y (boundary line). Enemy side is above this line.")]
+        public float EnemyDeployMinY = 1f;
 
-        [Tooltip("Local-side outpost A position (Player A).")]
-        public Vector2 PlayerOutpostAPos = new Vector2(-6.5f, 2f);
+        [Header("Towers (Portrait)")]
+        [Tooltip("Player (bottom) main tower position.")]
+        public Vector2 PlayerMainTowerPos = new Vector2(0f, -9f);
 
-        [Tooltip("Local-side outpost B position (Player A).")]
-        public Vector2 PlayerOutpostBPos = new Vector2(-6.5f, -2f);
+        [Tooltip("Player (bottom) outpost A position.")]
+        public Vector2 PlayerOutpostAPos = new Vector2(-2f, -6.5f);
 
-        [Tooltip("Enemy main tower position (Player B).")]
-        public Vector2 EnemyMainTowerPos = new Vector2(9f, 0f);
+        [Tooltip("Player (bottom) outpost B position.")]
+        public Vector2 PlayerOutpostBPos = new Vector2(2f, -6.5f);
 
-        [Tooltip("Enemy outpost A position (Player B).")]
-        public Vector2 EnemyOutpostAPos = new Vector2(6.5f, 2f);
+        [Tooltip("Enemy (top) main tower position.")]
+        public Vector2 EnemyMainTowerPos = new Vector2(0f, 9f);
 
-        [Tooltip("Enemy outpost B position (Player B).")]
-        public Vector2 EnemyOutpostBPos = new Vector2(6.5f, -2f);
+        [Tooltip("Enemy (top) outpost A position.")]
+        public Vector2 EnemyOutpostAPos = new Vector2(-2f, 6.5f);
+
+        [Tooltip("Enemy (top) outpost B position.")]
+        public Vector2 EnemyOutpostBPos = new Vector2(2f, 6.5f);
     }
 }

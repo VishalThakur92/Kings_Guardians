@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: BattlefieldConfig
   m_EditorClassIdentifier: 
   LaneCount: 2
-  LaneSpacing: 3.5
-  HalfArenaLength: 10
-  FriendlyDeployMaxX: -1
-  EnemyDeployMinX: 1
-  PlayerMainTowerPos: {x: -9, y: 0}
-  PlayerOutpostAPos: {x: -6.5, y: 2}
-  PlayerOutpostBPos: {x: -6.5, y: -2}
-  EnemyMainTowerPos: {x: 9, y: 0}
-  EnemyOutpostAPos: {x: 6.5, y: 2}
-  EnemyOutpostBPos: {x: 6.5, y: -2}
+  LaneSpacing: 3
+  HalfArenaWidth: 5
+  HalfArenaHeight: 10
+  PlayerDeployMaxY: -1
+  EnemyDeployMinY: 1
+  PlayerMainTowerPos: {x: 0, y: -9}
+  PlayerOutpostAPos: {x: -2, y: -6.5}
+  PlayerOutpostBPos: {x: 2, y: -6.5}
+  EnemyMainTowerPos: {x: 0, y: 9}
+  EnemyOutpostAPos: {x: -2, y: 6.5}
+  EnemyOutpostBPos: {x: 2, y: 6.5}

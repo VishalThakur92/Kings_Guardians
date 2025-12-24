@@ -4,8 +4,7 @@ namespace KingGuardians.Core
 {
     /// <summary>
     /// Composition Root for the Battle scene.
-    /// This is where we wire up dependencies (SOLID: Dependency Inversion).
-    /// Avoid GameObject.Find and hidden scene coupling.
+    /// Wires config + scene references.
     /// </summary>
     public sealed class BattleInstaller : MonoBehaviour
     {
@@ -18,7 +17,6 @@ namespace KingGuardians.Core
 
         private void Awake()
         {
-            // Validate scene wiring early to fail fast.
             if (battlefieldConfig == null)
             {
                 Debug.LogError("[BattleInstaller] Missing BattlefieldConfig. Assign BattlefieldConfig_MVP.", this);
@@ -40,10 +38,8 @@ namespace KingGuardians.Core
                 return;
             }
 
-            // Provide config to systems that need it.
             battlefieldGizmos.Initialize(battlefieldConfig);
 
-            // Spawn towers for MVP (purely visual + placeholder objects).
             towerSpawner.Initialize(battlefieldConfig);
             towerSpawner.SpawnAll();
         }

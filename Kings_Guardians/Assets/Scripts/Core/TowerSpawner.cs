@@ -3,8 +3,8 @@ using UnityEngine;
 namespace KingGuardians.Core
 {
     /// <summary>
-    /// MVP-only spawner for towers/outposts.
-    /// Later, this will be replaced by a proper match state + server-authoritative spawn pipeline.
+    /// MVP tower spawner.
+    /// Spawns towers/outposts using positions from BattlefieldConfig (portrait or otherwise).
     /// </summary>
     public sealed class TowerSpawner : MonoBehaviour
     {
@@ -29,12 +29,12 @@ namespace KingGuardians.Core
 
             if (towersRoot == null) towersRoot = this.transform;
 
-            // Player A
+            // Player (bottom)
             Spawn(mainTowerPrefab, _cfg.PlayerMainTowerPos, "P_MainTower");
             Spawn(outpostPrefab, _cfg.PlayerOutpostAPos, "P_Outpost_A");
             Spawn(outpostPrefab, _cfg.PlayerOutpostBPos, "P_Outpost_B");
 
-            // Player B
+            // Enemy (top)
             Spawn(mainTowerPrefab, _cfg.EnemyMainTowerPos, "E_MainTower");
             Spawn(outpostPrefab, _cfg.EnemyOutpostAPos, "E_Outpost_A");
             Spawn(outpostPrefab, _cfg.EnemyOutpostBPos, "E_Outpost_B");

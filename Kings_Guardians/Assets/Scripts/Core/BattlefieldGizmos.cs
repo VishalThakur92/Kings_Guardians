@@ -3,12 +3,11 @@ using UnityEngine;
 namespace KingGuardians.Core
 {
     /// <summary>
-    /// Draws battlefield debug visuals in the Scene view:
-    /// - Lanes
-    /// - Deploy boundaries
-    /// - Arena extents
-    ///
-    /// This is MVP-only tooling but is extremely valuable for correctness.
+    /// Portrait battlefield debug visuals:
+    /// - Arena bounds (width x height)
+    /// - Lanes as vertical columns (lines parallel to Y axis)
+    /// - Deploy boundaries as horizontal lines (Y thresholds)
+    /// - Tower points
     /// </summary>
     public sealed class BattlefieldGizmos : MonoBehaviour
     {
@@ -29,8 +28,10 @@ namespace KingGuardians.Core
         private void DrawArenaBounds()
         {
             Gizmos.color = Color.white;
+
+            // Portrait arena: width along X, height along Y.
             var center = Vector3.zero;
-            var size = new Vector3(_cfg.HalfArenaLength * 2f, _cfg.LaneSpacing * Mathf.Max(1, _cfg.LaneCount), 0f);
+            var size = new Vector3(_cfg.HalfArenaWidth * 2f, _cfg.HalfArenaHeight * 2f, 0f);
             Gizmos.DrawWireCube(center, size);
         }
 
@@ -38,25 +39,31 @@ namespace KingGuardians.Core
         {
             Gizmos.color = Color.cyan;
 
-            // Lanes are lines parallel to X axis at different Y offsets.
+            // Portrait lanes: vertical columns (lines parallel to Y axis at different X offsets).
             for (int i = 0; i < _cfg.LaneCount; i++)
             {
-                float y = LaneIndexToY(i);
-                var a = new Vector3(-_cfg.HalfArenaLength, y, 0f);
-                var b = new Vector3(_cfg.HalfArenaLength, y, 0f);
+                float x = LaneIndexToX(i);
+                var a = new Vector3(x, -_cfg.HalfArenaHeight, 0f);
+                var b = new Vector3(x, _cfg.HalfArenaHeight, 0f);
                 Gizmos.DrawLine(a, b);
             }
         }
 
         private void DrawDeployBoundaries()
         {
-            // Player A deploy boundary (left side)
+            // Player deploy boundary (bottom side ends at PlayerDeployMaxY)
             Gizmos.color = Color.green;
-            Gizmos.DrawLine(new Vector3(_cfg.FriendlyDeployMaxX, -50f, 0f), new Vector3(_cfg.FriendlyDeployMaxX, 50f, 0f));
+            Gizmos.DrawLine(
+                new Vector3(-50f, _cfg.PlayerDeployMaxY, 0f),
+                new Vector3(50f, _cfg.PlayerDeployMaxY, 0f)
+            );
 
-            // Player B deploy boundary (right side)
+            // Enemy deploy boundary (top side starts at EnemyDeployMinY)
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(new Vector3(_cfg.EnemyDeployMinX, -50f, 0f), new Vector3(_cfg.EnemyDeployMinX, 50f, 0f));
+            Gizmos.DrawLine(
+                new Vector3(-50f, _cfg.EnemyDeployMinY, 0f),
+                new Vector3(50f, _cfg.EnemyDeployMinY, 0f)
+            );
         }
 
         private void DrawTowerPositions()
@@ -77,10 +84,10 @@ namespace KingGuardians.Core
             Gizmos.DrawSphere(new Vector3(p.x, p.y, 0f), 0.2f);
         }
 
-        private float LaneIndexToY(int laneIndex)
+        private float LaneIndexToX(int laneIndex)
         {
-            // Center lanes around Y=0.
-            // For 2 lanes: y = +spacing/2 and -spacing/2
+            // Center lanes around X=0.
+            // For 2 lanes: x = -spacing/2 and +spacing/2
             float mid = (_cfg.LaneCount - 1) * 0.5f;
             return (laneIndex - mid) * _cfg.LaneSpacing;
         }
