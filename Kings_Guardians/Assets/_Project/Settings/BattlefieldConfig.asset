@@ -19,8 +19,8 @@ MonoBehaviour:
   PlayerDeployMaxY: -1
   EnemyDeployMinY: 1
   PlayerMainTowerPos: {x: 0, y: -9}
-  PlayerOutpostAPos: {x: -2, y: -6.5}
-  PlayerOutpostBPos: {x: 2, y: -6.5}
+  PlayerOutpostAPos: {x: -3.5, y: -7.5}
+  PlayerOutpostBPos: {x: 3.5, y: -7.5}
   EnemyMainTowerPos: {x: 0, y: 9}
-  EnemyOutpostAPos: {x: -2, y: 6.5}
-  EnemyOutpostBPos: {x: 2, y: 6.5}
+  EnemyOutpostAPos: {x: -3.5, y: 7.5}
+  EnemyOutpostBPos: {x: 3.5, y: 7.5}
