@@ -15,7 +15,7 @@ MonoBehaviour:
   LaneCount: 2
   LaneSpacing: 3
   HalfArenaWidth: 5
-  HalfArenaHeight: 10
+  HalfArenaHeight: 9.5
   PlayerDeployMaxY: -1
   EnemyDeployMinY: 1
   PlayerMainTowerPos: {x: 0, y: -9}
