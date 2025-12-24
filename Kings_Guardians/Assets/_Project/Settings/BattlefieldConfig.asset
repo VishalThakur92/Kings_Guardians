@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 252af5ed000d3d8428bc067304a62bac, type: 3}
+  m_Name: BattlefieldConfig
+  m_EditorClassIdentifier: 
+  LaneCount: 2
+  LaneSpacing: 3.5
+  HalfArenaLength: 10
+  FriendlyDeployMaxX: -1
+  EnemyDeployMinX: 1
+  PlayerMainTowerPos: {x: -9, y: 0}
+  PlayerOutpostAPos: {x: -6.5, y: 2}
+  PlayerOutpostBPos: {x: -6.5, y: -2}
+  EnemyMainTowerPos: {x: 9, y: 0}
+  EnemyOutpostAPos: {x: 6.5, y: 2}
+  EnemyOutpostBPos: {x: 6.5, y: -2}
