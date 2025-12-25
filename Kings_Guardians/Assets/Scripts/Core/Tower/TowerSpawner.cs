@@ -22,6 +22,11 @@ namespace KingGuardians.Core
         [SerializeField] private int outpostHp = 150;
         [SerializeField] private int mainTowerHp = 300;
 
+        // Add this near other serialized fields
+        [SerializeField] private GameObject worldHealthBarPrefab;
+        [SerializeField] private Vector3 healthBarOffset = new Vector3(0f, 1.2f, 0f);
+
+
         private BattlefieldConfig _cfg;
 
         public void Initialize(BattlefieldConfig cfg) => _cfg = cfg;
@@ -68,9 +73,21 @@ namespace KingGuardians.Core
             if (health == null) health = go.AddComponent<TowerHealth>();
             health.Init(team, type, hp);
 
+            AttachHealthBar(go.transform);
+
+
             // Trigger collider for "in range" detection
             EnsureTriggerCollider(go, type);
         }
+
+        private void AttachHealthBar(Transform parent)
+        {
+            if (worldHealthBarPrefab == null) return;
+
+            var hb = Instantiate(worldHealthBarPrefab, parent);
+            hb.transform.localPosition = healthBarOffset;
+        }
+
 
         private void EnsureTriggerCollider(GameObject go, TowerType type)
         {
@@ -78,7 +95,7 @@ namespace KingGuardians.Core
             if (col == null) col = go.AddComponent<CircleCollider2D>();
 
             col.isTrigger = true;
-            col.radius = (type == TowerType.Main) ? 23f : 7f;
+            //col.radius = (type == TowerType.Main) ? 23f : 7f;
         }
     }
 }
