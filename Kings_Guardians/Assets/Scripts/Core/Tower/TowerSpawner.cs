@@ -4,8 +4,10 @@ using KingGuardians.Towers;
 namespace KingGuardians.Core
 {
     /// <summary>
-    /// MVP tower spawner.
-    /// Spawns towers/outposts using BattlefieldConfig positions and assigns team/type at runtime.
+    /// MVP tower spawner:
+    /// - Spawns towers using BattlefieldConfig positions
+    /// - Ensures TowerAnchor (identity) and TowerHealth (HP) exist
+    /// - Configures trigger colliders for detection
     /// </summary>
     public sealed class TowerSpawner : MonoBehaviour
     {
@@ -15,6 +17,10 @@ namespace KingGuardians.Core
 
         [Header("Hierarchy")]
         [SerializeField] private Transform towersRoot;
+
+        [Header("MVP HP")]
+        [SerializeField] private int outpostHp = 150;
+        [SerializeField] private int mainTowerHp = 300;
 
         private BattlefieldConfig _cfg;
 
@@ -31,17 +37,17 @@ namespace KingGuardians.Core
             if (towersRoot == null) towersRoot = this.transform;
 
             // Player (bottom)
-            SpawnTower(mainTowerPrefab, _cfg.PlayerMainTowerPos, "P_MainTower", TeamId.Player, TowerType.Main);
-            SpawnTower(outpostPrefab, _cfg.PlayerOutpostAPos, "P_Outpost_A", TeamId.Player, TowerType.Outpost);
-            SpawnTower(outpostPrefab, _cfg.PlayerOutpostBPos, "P_Outpost_B", TeamId.Player, TowerType.Outpost);
+            SpawnTower(mainTowerPrefab, _cfg.PlayerMainTowerPos, "P_MainTower", TeamId.Player, TowerType.Main, mainTowerHp);
+            SpawnTower(outpostPrefab, _cfg.PlayerOutpostAPos, "P_Outpost_A", TeamId.Player, TowerType.Outpost, outpostHp);
+            SpawnTower(outpostPrefab, _cfg.PlayerOutpostBPos, "P_Outpost_B", TeamId.Player, TowerType.Outpost, outpostHp);
 
             // Enemy (top)
-            SpawnTower(mainTowerPrefab, _cfg.EnemyMainTowerPos, "E_MainTower", TeamId.Enemy, TowerType.Main);
-            SpawnTower(outpostPrefab, _cfg.EnemyOutpostAPos, "E_Outpost_A", TeamId.Enemy, TowerType.Outpost);
-            SpawnTower(outpostPrefab, _cfg.EnemyOutpostBPos, "E_Outpost_B", TeamId.Enemy, TowerType.Outpost);
+            SpawnTower(mainTowerPrefab, _cfg.EnemyMainTowerPos, "E_MainTower", TeamId.Enemy, TowerType.Main, mainTowerHp);
+            SpawnTower(outpostPrefab, _cfg.EnemyOutpostAPos, "E_Outpost_A", TeamId.Enemy, TowerType.Outpost, outpostHp);
+            SpawnTower(outpostPrefab, _cfg.EnemyOutpostBPos, "E_Outpost_B", TeamId.Enemy, TowerType.Outpost, outpostHp);
         }
 
-        private void SpawnTower(GameObject prefab, Vector2 pos, string name, TeamId team, TowerType type)
+        private void SpawnTower(GameObject prefab, Vector2 pos, string name, TeamId team, TowerType type, int hp)
         {
             if (prefab == null)
             {
@@ -52,27 +58,18 @@ namespace KingGuardians.Core
             var go = Instantiate(prefab, new Vector3(pos.x, pos.y, 0f), Quaternion.identity, towersRoot);
             go.name = name;
 
-            // Ensure TowerAnchor exists and is configured
+            // Identity
             var anchor = go.GetComponent<TowerAnchor>();
-            if (anchor == null)
-            {
-                anchor = go.AddComponent<TowerAnchor>();
-            }
-
-            // Use reflection-free assignment via serialized backing fields? We kept them private.
-            // So we configure by adding a small helper method (see below).
-            ConfigureTowerAnchor(anchor, team, type);
-
-            // Ensure trigger collider exists
-            EnsureTriggerCollider(go, type);
-        }
-
-        private void ConfigureTowerAnchor(TowerAnchor anchor, TeamId team, TowerType type)
-        {
-            // TowerAnchor fields are serialized private; for MVP we keep it simple:
-            // Use Unity's SerializedObject only in editor is messy; instead expose an Init().
-            // We'll use an Init method by updating TowerAnchor accordingly.
+            if (anchor == null) anchor = go.AddComponent<TowerAnchor>();
             anchor.Init(team, type);
+
+            // HP
+            var health = go.GetComponent<TowerHealth>();
+            if (health == null) health = go.AddComponent<TowerHealth>();
+            health.Init(team, type, hp);
+
+            // Trigger collider for "in range" detection
+            EnsureTriggerCollider(go, type);
         }
 
         private void EnsureTriggerCollider(GameObject go, TowerType type)
@@ -81,9 +78,7 @@ namespace KingGuardians.Core
             if (col == null) col = go.AddComponent<CircleCollider2D>();
 
             col.isTrigger = true;
-
-            // Simple radii for MVP
-            col.radius = (type == TowerType.Main) ? 23f : 8f;
+            col.radius = (type == TowerType.Main) ? 23f : 7f;
         }
     }
 }

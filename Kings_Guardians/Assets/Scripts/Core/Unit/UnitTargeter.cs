@@ -6,53 +6,66 @@ namespace KingGuardians.Units
 {
     /// <summary>
     /// MVP targeting:
-    /// - Detects enemy towers via trigger entry.
-    /// - Stops UnitMotor when in range of the first enemy structure reached.
-    ///
-    /// Later this becomes:
-    /// - target selection rules
-    /// - attack range checks
-    /// - combat state machine
+    /// - Detect enemy towers via trigger entry
+    /// - Stop movement
+    /// - Set UnitAttack target to the tower's TowerHealth
     /// </summary>
     [RequireComponent(typeof(UnitMotor))]
+    [RequireComponent(typeof(UnitAttack))]
     public sealed class UnitTargeter : MonoBehaviour
     {
         [Header("Identity")]
         [SerializeField] private TeamId team = TeamId.Player;
 
         private UnitMotor _motor;
+        private UnitAttack _attack;
 
-        private TowerAnchor _currentTarget;
+        private TowerAnchor _currentTargetAnchor;
+        private TowerHealth _currentTargetHealth;
 
         private void Awake()
         {
             _motor = GetComponent<UnitMotor>();
+            _attack = GetComponent<UnitAttack>();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // Only care about towers
-            if (!other.TryGetComponent<TowerAnchor>(out var tower))
+            if (!other.TryGetComponent<TowerAnchor>(out var towerAnchor))
                 return;
 
             // Ignore friendly towers
-            if (tower.Team == team)
+            if (towerAnchor.Team == team)
                 return;
 
-            // If we already have a target, keep the first one we reached (MVP rule).
-            if (_currentTarget != null)
+            // Keep first target reached (MVP)
+            if (_currentTargetAnchor != null)
                 return;
 
-            _currentTarget = tower;
+            // Require TowerHealth for combat
+            if (!other.TryGetComponent<TowerHealth>(out var towerHealth))
+                return;
 
-            // Stop movement when we reach the first enemy tower.
+            _currentTargetAnchor = towerAnchor;
+            _currentTargetHealth = towerHealth;
+
+            // Stop and engage
             _motor.Stop();
+            _attack.SetTarget(towerHealth);
         }
 
-        private void OnTriggerExit2D(Collider2D other)
+        private void Update()
         {
-            // If we ever move away in future logic, we could resume.
-            // For MVP, units stop and stay.
+            // If our target died, clear target.
+            if (_currentTargetHealth != null && !_currentTargetHealth.IsAlive)
+            {
+                _attack.ClearTarget();
+                _currentTargetHealth = null;
+                _currentTargetAnchor = null;
+
+                // MVP behavior: resume forward movement after destroying an outpost
+                _motor.Resume();
+            }
         }
     }
 }

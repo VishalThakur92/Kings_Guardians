@@ -4,7 +4,8 @@ using KingGuardians.Core;
 namespace KingGuardians.Towers
 {
     /// <summary>
-    /// Minimal tower identity + detection radius for MVP.
+    /// Minimal tower identity used by targeting.
+    /// TowerHealth handles HP/damage separately.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class TowerAnchor : MonoBehaviour
@@ -16,10 +17,6 @@ namespace KingGuardians.Towers
         public TeamId Team => team;
         public TowerType Type => towerType;
 
-        /// <summary>
-        /// Runtime initialization (spawner assigns correct values).
-        /// Keeps prefabs generic and avoids duplicating prefabs for teams.
-        /// </summary>
         public void Init(TeamId newTeam, TowerType newType)
         {
             team = newTeam;
