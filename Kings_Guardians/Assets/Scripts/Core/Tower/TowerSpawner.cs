@@ -18,6 +18,13 @@ namespace KingGuardians.Core
         [Header("Hierarchy")]
         [SerializeField] private Transform towersRoot;
 
+        [Header("MVP Tower Attack")]
+        [SerializeField] private bool enableTowerAttack = true;
+        [SerializeField] private int outpostDamage = 6;
+        [SerializeField] private int mainTowerDamage = 10;
+        [SerializeField] private float towerAttackInterval = 0.75f;
+
+
         [Header("MVP HP")]
         [SerializeField] private int outpostHp = 150;
         [SerializeField] private int mainTowerHp = 300;
@@ -76,9 +83,35 @@ namespace KingGuardians.Core
             AttachHealthBar(go.transform);
 
 
+            // Attack (optional for MVP completeness)
+            if (enableTowerAttack)
+            {
+                var attack = go.GetComponent<TowerAttack>();
+                if (attack == null) attack = go.AddComponent<TowerAttack>();
+
+                attack.Init(team);
+
+                // Configure attack numbers based on tower type (MVP tuning)
+                // NOTE: fields are private serialized; simplest MVP approach is to set in prefab/inspector,
+                // but since we add at runtime, we can expose a Configure method.
+                ConfigureTowerAttack(attack, type);
+            }
+
+
             // Trigger collider for "in range" detection
             EnsureTriggerCollider(go, type);
         }
+
+        private void ConfigureTowerAttack(TowerAttack attack, TowerType type)
+        {
+            // MVP: configure via reflection-free explicit method by adding this method to TowerAttack.
+            // We'll do it cleanly: add a Configure() method to TowerAttack (shown below).
+            if (type == TowerType.Main)
+                attack.Configure(mainTowerDamage, towerAttackInterval);
+            else
+                attack.Configure(outpostDamage, towerAttackInterval);
+        }
+
 
         private void AttachHealthBar(Transform parent)
         {
