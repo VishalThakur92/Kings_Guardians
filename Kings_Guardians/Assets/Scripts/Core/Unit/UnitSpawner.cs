@@ -8,23 +8,22 @@ namespace KingGuardians.Core
     /// </summary>
     public sealed class UnitSpawner
     {
-        private readonly GameObject _unitPrefab;
         private readonly Transform _root;
 
-        public UnitSpawner(GameObject unitPrefab, Transform root)
+        public UnitSpawner(Transform root)
         {
-            _unitPrefab = unitPrefab;
             _root = root;
         }
-        public GameObject Spawn(Vector2 worldPos, string namePrefix = "Unit")
+
+        public GameObject Spawn(GameObject prefab, Vector2 worldPos, string namePrefix = "Unit")
         {
-            if (_unitPrefab == null)
+            if (prefab == null)
             {
-                Debug.LogError("[UnitSpawner] Unit prefab is null.");
+                Debug.LogError("[UnitSpawner] Prefab is null.");
                 return null;
             }
 
-            var go = Object.Instantiate(_unitPrefab, new Vector3(worldPos.x, worldPos.y, 0f), Quaternion.identity, _root);
+            var go = Object.Instantiate(prefab, new Vector3(worldPos.x, worldPos.y, 0f), Quaternion.identity, _root);
             go.name = $"{namePrefix}_{go.GetInstanceID()}";
 
             // Ensure identity exists and is set to Player for MVP spawns.
