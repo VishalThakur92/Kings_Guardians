@@ -27,7 +27,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.04, y: 0.04, z: 1}
+  m_LocalScale: {x: 0.66665, y: 0.66665, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2233683109514970058}
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4495478712733764576, guid: 26144b07dd196dd41afd39680f23a56f, type: 3}
+  m_Sprite: {fileID: 8218771907821357143, guid: 6a5dedcc827a02944b868453c747d610, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,13 +97,14 @@ GameObject:
   m_Component:
   - component: {fileID: 2233683109514970058}
   - component: {fileID: 3918449685349139567}
-  - component: {fileID: 7622846947336839661}
   - component: {fileID: -6112164611923495527}
+  - component: {fileID: 7622846947336839661}
   - component: {fileID: 4866376194155307089}
   - component: {fileID: 3612627774657475374}
   - component: {fileID: 1063759156911198281}
+  - component: {fileID: 9128112301403710956}
   m_Layer: 0
-  m_Name: Unit_Placeholder
+  m_Name: soldier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -162,19 +163,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 1
---- !u!114 &7622846947336839661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5130948200137111212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8afff65ef2934b489552482b20f47d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 2
 --- !u!50 &-6112164611923495527
 Rigidbody2D:
   serializedVersion: 5
@@ -202,6 +190,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &7622846947336839661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130948200137111212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8afff65ef2934b489552482b20f47d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 2
 --- !u!114 &4866376194155307089
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,6 +243,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHp: 50
+--- !u!114 &9128112301403710956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130948200137111212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a5df5e70e59af14c8150baa73a064c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 0
 --- !u!1001 &3875048308876944826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -250,9 +264,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2233683109514970058}
     m_Modifications:
+    - target: {fileID: 681661393357418375, guid: 0797f04dd8e004d4e8a60defed8c2e49, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7424040995317510215, guid: 0797f04dd8e004d4e8a60defed8c2e49, type: 3}
       propertyPath: m_Name
       value: HealthBar_World
+      objectReference: {fileID: 0}
+    - target: {fileID: 7424040995317510215, guid: 0797f04dd8e004d4e8a60defed8c2e49, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7494250823674855402, guid: 0797f04dd8e004d4e8a60defed8c2e49, type: 3}
       propertyPath: m_Pivot.x

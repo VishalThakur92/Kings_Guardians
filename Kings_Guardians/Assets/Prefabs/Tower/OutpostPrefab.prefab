@@ -98,6 +98,8 @@ GameObject:
   - component: {fileID: 6175059528564226897}
   - component: {fileID: -2184321560838121166}
   - component: {fileID: -838477308777363846}
+  - component: {fileID: 6188887571046768712}
+  - component: {fileID: 7396360813844256629}
   m_Layer: 0
   m_Name: OutpostPrefab
   m_TagString: Untagged
@@ -171,3 +173,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   towerType: 0
+--- !u!114 &6188887571046768712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7726508594080007860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a959056cf75203447ab45a2aa9009701, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 1
+  damagePerHit: 10
+  attackInterval: 0.75
+--- !u!114 &7396360813844256629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7726508594080007860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 068b1a16ae4c2894baf3648ca7ae048c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  team: 1
+  towerType: 0
+  maxHp: 200

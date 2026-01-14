@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18707d44da7b4d48a0c2e4e48040cce, type: 3}
+  m_Name: soldier
+  m_EditorClassIdentifier: 
+  DisplayName: soldier
+  Icon: {fileID: 8218771907821357143, guid: 6a5dedcc827a02944b868453c747d610, type: 3}
+  EnergyCost: 1
+  SpawnPrefab: {fileID: 5130948200137111212, guid: 1f0d58d93d9ec034cb81dea60716578f, type: 3}
