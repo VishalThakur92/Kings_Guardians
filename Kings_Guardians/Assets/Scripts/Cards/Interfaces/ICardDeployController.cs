@@ -6,5 +6,8 @@ namespace KingGuardians.Core
     {
         void SelectSlot(int slotIndex);
         bool TryDeployAtScreen(Vector2 screenPos);
+
+        //Preview only (no spend, no spawn)
+        bool CanDeployAtScreen(Vector2 screenPos);
     }
 }

@@ -54,6 +54,15 @@ namespace KingGuardians.UI
         [Tooltip("Scale multiplier applied to the ghost while dragging (1 = same as card icon).")]
         [SerializeField] private float ghostScale = 0.75f;
 
+        [Header("Ghost Visuals")]
+        [Tooltip("Color used when placement is valid.")]
+        [SerializeField] private Color validTint = Color.white;
+
+        [Tooltip("Color used when placement is NOT valid.")]
+        [SerializeField] private Color invalidTint = new Color(1f, 0.2f, 0.2f, 1f);
+        private Color _ghostBaseColor = Color.white;
+
+
 
         /// <summary>
         /// Injects dependencies. Call from your installer after scene loads.
@@ -74,7 +83,12 @@ namespace KingGuardians.UI
 
             // Cache the ghost RectTransform for fast updates.
             if (ghostImage != null)
+            {
                 _ghostRect = ghostImage.rectTransform;
+
+                // Cache original color so we can restore it when valid
+                _ghostBaseColor = ghostImage.color;
+            }
 
             // Ghost should be hidden by default.
             SetGhostVisible(false);
@@ -119,8 +133,13 @@ namespace KingGuardians.UI
 
             SetGhostVisible(true);
 
+
             // Position ghost immediately on drag start.
             UpdateGhostPosition(eventData);
+
+
+            // Update tint immediately at drag start
+            UpdateGhostTint(eventData.position);
         }
 
         /// <summary>
@@ -129,7 +148,9 @@ namespace KingGuardians.UI
         public void OnDrag(PointerEventData eventData)
         {
             if (_deployController == null) return;
+            UpdateGhostTint(eventData.position);
             UpdateGhostPosition(eventData);
+
         }
 
         /// <summary>
@@ -155,10 +176,34 @@ namespace KingGuardians.UI
             // Restore scale so it doesn't affect layout when returned to slot.
             _ghostRect.localScale = Vector3.one;
 
+            // Restore ghost color so it doesn't remain tinted next drag
+            if (ghostImage != null)
+                ghostImage.color = _ghostBaseColor;
+
+
             // Request deployment at the release screen position.
             // Controller will validate: deploy zone + energy + lane snap.
             _deployController.TryDeployAtScreen(eventData.position);
         }
+
+
+        /// <summary>
+        /// Updates ghost tint based on whether the selected card can be deployed at the current screen position.
+        /// This is preview-only and does NOT spend energy.
+        /// </summary>
+        private void UpdateGhostTint(Vector2 screenPos)
+        {
+            if (ghostImage == null || _deployController == null) return;
+
+            bool canPlace = _deployController.CanDeployAtScreen(screenPos);
+            Debug.LogError("canPlace  = " + canPlace);
+
+
+            // If valid, keep normal appearance. If invalid, tint red.
+            // Use base color so designers can set alpha or styling in prefab.
+            ghostImage.color = canPlace ? (_ghostBaseColor * validTint) : invalidTint;
+        }
+
 
         private void UpdateGhostPosition(PointerEventData eventData)
         {
