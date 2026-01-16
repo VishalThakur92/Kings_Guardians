@@ -202,4 +202,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 1
   towerType: 0
-  maxHp: 200
+  maxHp: 20000

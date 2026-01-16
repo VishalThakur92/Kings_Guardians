@@ -6,13 +6,22 @@ namespace KingGuardians.UI
 {
     /// <summary>
     /// UI for one card slot (icon + cost + selection highlight).
+    /// SlotIndex explicitly maps this UI element to a hand index (0..HandSize-1),
+    /// so inspector array order cannot cause wrong spawns.
     /// </summary>
     public sealed class CardSlotView : MonoBehaviour
     {
+        [Header("Slot")]
+        [Tooltip("Hand index this UI represents (0..3).")]
+        [SerializeField] private int slotIndex = 0;
+
+        public int SlotIndex => slotIndex;
+
+        [Header("UI")]
         [SerializeField] private Button button;
         [SerializeField] private Image icon;
         [SerializeField] private TMP_Text costText;
-        [SerializeField] private GameObject selectedHighlight; // optional
+        [SerializeField] private GameObject selectedHighlight;
 
         public Button Button => button;
 

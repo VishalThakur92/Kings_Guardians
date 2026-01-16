@@ -80,15 +80,17 @@ namespace KingGuardians.Core
             _hand.OnHandChanged += RefreshHandUI;
             RefreshHandUI();
 
-            // Wire card clicks
+            // Wire card clicks (do NOT assume array order == slot index)
             for (int i = 0; i < cardSlots.Length; i++)
             {
-                int idx = i;
-                cardSlots[i].Button.onClick.AddListener(() =>
+                var slotView = cardSlots[i];
+                int handIndex = slotView.SlotIndex;
+
+                slotView.Button.onClick.AddListener(() =>
                 {
-                    _deployController.SelectSlot(idx);
+                    _deployController.SelectSlot(handIndex);
                     RefreshSelectionUI();
-                    RefreshHandUI(); // also refresh interactable based on energy
+                    RefreshHandUI(); // refresh interactable based on energy
                 });
             }
 
@@ -110,10 +112,13 @@ namespace KingGuardians.Core
         {
             for (int i = 0; i < cardSlots.Length; i++)
             {
-                var card = _hand.GetCardAt(i);
+                var slotView = cardSlots[i];
+                int handIndex = slotView.SlotIndex;
 
-                cardSlots[i].SetIcon(card != null ? card.Icon : null);
-                cardSlots[i].SetCost(card != null ? card.EnergyCost : 0);
+                var card = _hand.GetCardAt(handIndex);
+
+                slotView.SetIcon(card != null ? card.Icon : null);
+                slotView.SetCost(card != null ? card.EnergyCost : 0);
             }
 
             RefreshHandInteractableOnly();
@@ -123,16 +128,22 @@ namespace KingGuardians.Core
         {
             for (int i = 0; i < cardSlots.Length; i++)
             {
-                var card = _hand.GetCardAt(i);
+                var slotView = cardSlots[i];
+                int handIndex = slotView.SlotIndex;
+
+                var card = _hand.GetCardAt(handIndex);
                 bool can = (card != null) && _energy.CanSpend(card.EnergyCost);
-                cardSlots[i].SetInteractable(can);
+                slotView.SetInteractable(can);
             }
         }
 
         private void RefreshSelectionUI()
         {
             for (int i = 0; i < cardSlots.Length; i++)
-                cardSlots[i].SetSelected(i == _deployController.SelectedSlot);
+            {
+                var slotView = cardSlots[i];
+                slotView.SetSelected(slotView.SlotIndex == _deployController.SelectedSlot);
+            }
         }
     }
 }
