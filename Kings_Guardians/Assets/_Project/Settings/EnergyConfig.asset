@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartEnergy: 10
   MaxEnergy: 50
-  RegenPerSecond: 0.5
+  RegenPerSecond: 1
