@@ -19,7 +19,7 @@ namespace KingGuardians.Core
         [SerializeField] private Transform unitsRoot;
 
         [Header("Scene Refs")]
-        [SerializeField] private BattlefieldTapInput battlefieldTapInput;
+        //[SerializeField] private BattlefieldTapInput battlefieldTapInput;
         [SerializeField] private EnergyBarView energyBarView;
         [SerializeField] private CardSlotView[] cardSlots; // size 4
 
@@ -28,6 +28,10 @@ namespace KingGuardians.Core
         private CardDeploymentController _deployController;
         private DeploymentValidator _deployValidator;
         private UnitSpawner _spawner;
+
+        [SerializeField] private Canvas rootCanvas; // BattleHUD canvas
+        [SerializeField] private CardDragDeploy[] draggableSlots; // same 4 card slot objects
+
 
         private void Awake()
         {
@@ -39,7 +43,7 @@ namespace KingGuardians.Core
                 return;
             }
 
-            if (battlefieldTapInput == null || energyBarView == null || cardSlots == null || cardSlots.Length == 0)
+            if (energyBarView == null || cardSlots == null || cardSlots.Length == 0)
             {
                 Debug.LogError("[Phase2Installer] Missing scene references (tap input / energy bar / card slots).", this);
                 enabled = false;
@@ -63,15 +67,23 @@ namespace KingGuardians.Core
 
             // Build deploy controller
             _deployController = new CardDeploymentController(
-                battlefieldConfig,
-                _deployValidator,
-                _spawner,
-                _energy,
-                _hand
+              battlefieldConfig,
+              _deployValidator,
+              _spawner,
+              _energy,
+              _hand,
+              Camera.main
             );
 
+            //initialize each drag slot:
+            for (int i = 0; i < draggableSlots.Length; i++)
+            {
+                draggableSlots[i].Initialize(_deployController, _hand, rootCanvas);
+            }
+
+
             // Hook input
-            battlefieldTapInput.Initialize(_deployController);
+            //battlefieldTapInput.Initialize(_deployController);
 
             // Hook energy UI
             _energy.OnChanged += energyBarView.Set;

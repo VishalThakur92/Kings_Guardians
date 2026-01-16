@@ -7,7 +7,7 @@ namespace KingGuardians.Cards
     /// Maintains the active hand and cycling order.
     /// Pure logic, no Unity objects.
     /// </summary>
-    public sealed class HandModel
+    public sealed class HandModel : ICardProvider
     {
         public event Action OnHandChanged;
 
