@@ -31,6 +31,16 @@ namespace KingGuardians.Units
             _target = null;
         }
 
+        /// <summary>
+        /// Applies combat values from stats.
+        /// </summary>
+        public void ApplyAttackStats(int damage, float interval)
+        {
+            damagePerHit = Mathf.Max(0, damage);
+            attackInterval = Mathf.Max(0.05f, interval);
+        }
+
+
         private void Update()
         {
             if (_target == null || !_target.IsAlive) return;

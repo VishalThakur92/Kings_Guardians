@@ -93,8 +93,25 @@ namespace KingGuardians.Core
             if (!_energy.TrySpend(card.EnergyCost))
                 return false;
 
-            _spawner.Spawn(card.SpawnPrefab, snapped, "P");
+            var unitGo = _spawner.Spawn(card.SpawnPrefab, snapped, "P");
+
             _hand.UseCardAt(SelectedSlot);
+
+            // Apply stats if this is a unit card
+            if (unitGo != null && card.UnitStats != null)
+            {
+                // Health
+                var hp = unitGo.GetComponent<KingGuardians.Units.UnitHealth>();
+                if (hp != null) hp.ApplyMaxHp(card.UnitStats.MaxHp);
+
+                // Movement
+                var motor = unitGo.GetComponent<KingGuardians.Units.UnitMotor>();
+                if (motor != null) motor.ApplyMoveSpeed(card.UnitStats.MoveSpeed);
+
+                // Attack
+                var atk = unitGo.GetComponent<KingGuardians.Units.UnitAttack>();
+                if (atk != null) atk.ApplyAttackStats(card.UnitStats.DamagePerHit, card.UnitStats.AttackInterval);
+            }
 
             return true;
         }

@@ -17,6 +17,15 @@ namespace KingGuardians.Units
         public void Stop() => _isStopped = true;
         public void Resume() => _isStopped = false;
 
+        /// <summary>
+        /// Applies movement speed from stats.
+        /// </summary>
+        public void ApplyMoveSpeed(float speed)
+        {
+            moveSpeed = Mathf.Max(0f, speed);
+        }
+
+
         private void Update()
         {
             if (_isStopped) return;

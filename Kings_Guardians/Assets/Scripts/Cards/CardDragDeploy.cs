@@ -196,7 +196,6 @@ namespace KingGuardians.UI
             if (ghostImage == null || _deployController == null) return;
 
             bool canPlace = _deployController.CanDeployAtScreen(screenPos);
-            Debug.LogError("canPlace  = " + canPlace);
 
 
             // If valid, keep normal appearance. If invalid, tint red.

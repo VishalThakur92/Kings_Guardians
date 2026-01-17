@@ -54,6 +54,17 @@ namespace KingGuardians.Units
                 Die();
         }
 
+        /// <summary>
+        /// Applies stats to this unit. Safe to call right after spawn.
+        /// </summary>
+        public void ApplyMaxHp(int hp)
+        {
+            maxHp = Mathf.Max(1, hp);
+            _currentHp = maxHp;
+            OnHealthChanged?.Invoke(_currentHp, maxHp);
+        }
+
+
         private void Die()
         {
             // MVP: destroy unit (later: death anim, pooling)

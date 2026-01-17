@@ -1,7 +1,9 @@
+using KingGuardians.Units;
 using UnityEngine;
 
 namespace KingGuardians.Cards
 {
+
     /// <summary>
     /// Defines a playable card in the deck.
     /// MVP: only unit spawn + cost + icon.
@@ -10,6 +12,10 @@ namespace KingGuardians.Cards
     [CreateAssetMenu(menuName = "KingGuardians/Cards/Card Definition", fileName = "Card_")]
     public sealed class CardDefinition : ScriptableObject
     {
+
+        [Header("Unit Stats (MVP)")]
+        public UnitStatsDefinition UnitStats;
+    
         [Header("UI")]
         public string DisplayName;
         public Sprite Icon;
