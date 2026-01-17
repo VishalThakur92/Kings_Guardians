@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: UnitStats_Balanced
   m_EditorClassIdentifier: 
   MaxHp: 120
-  MoveSpeed: 2
+  MoveSpeed: 1.5
   DamagePerHit: 25
   AttackInterval: 0.75

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e18707d44da7b4d48a0c2e4e48040cce, type: 3}
   m_Name: vader
   m_EditorClassIdentifier: 
+  UnitStats: {fileID: 11400000, guid: ee15b106a81e70a42a7cd3dc1bcf8ba0, type: 2}
   DisplayName: vader
   Icon: {fileID: -7263364450282628973, guid: 2c1064c3bf03f644ea903fd17085405a, type: 3}
   EnergyCost: 4
