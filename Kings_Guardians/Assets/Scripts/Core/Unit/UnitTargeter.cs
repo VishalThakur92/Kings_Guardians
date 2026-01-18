@@ -3,6 +3,8 @@ using KingGuardians.Core;
 using KingGuardians.Towers;
 using System.Collections.Generic;
 using UnityEngine;
+using KingGuardians.Units;
+
 
 namespace KingGuardians.Units
 {
@@ -173,18 +175,20 @@ namespace KingGuardians.Units
         private void OnTriggerEnter2D(Collider2D other)
         {
             // ---- Enemy Unit detection ----
-            // Unit must have UnitIdentity to determine if it's enemy.
-            if (other.TryGetComponent<UnitIdentity>(out var identity) &&
+            if (other.TryGetComponent<UnitDescriptor>(out var otherDesc) &&
                 other.TryGetComponent<UnitHealth>(out var unitHealth))
             {
                 // Ignore friendly units.
-                if (identity.Team == team) return;
+                if (otherDesc.Team == team) return;
 
-                // Track enemy unit if not already tracked.
+                // Check if THIS unit is allowed to target the other unit's domain.
+                if (!CanTargetDomain(otherDesc.Domain))
+                    return;
+
                 if (!_enemyUnitsInRange.Contains(unitHealth))
                     _enemyUnitsInRange.Add(unitHealth);
 
-                return; // A collider can also have other components; unit takes precedence.
+                return;
             }
 
             // ---- Enemy Tower detection ----
@@ -213,5 +217,18 @@ namespace KingGuardians.Units
                 _enemyTowersInRange.Remove(towerHealth);
             }
         }
+
+        private bool CanTargetDomain(UnitDomain targetDomain)
+        {
+            // If we don't have a descriptor, default to Ground targeting (safe MVP fallback).
+            var selfDesc = GetComponent<UnitDescriptor>();
+            if (selfDesc == null) return targetDomain == UnitDomain.Ground;
+
+            if (targetDomain == UnitDomain.Ground) return (selfDesc.CanTarget & TargetMask.Ground) != 0;
+            if (targetDomain == UnitDomain.Air) return (selfDesc.CanTarget & TargetMask.Air) != 0;
+
+            return false;
+        }
+
     }
 }

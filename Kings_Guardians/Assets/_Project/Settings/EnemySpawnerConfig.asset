@@ -16,14 +16,17 @@ MonoBehaviour:
   SpawnIntervalSeconds: 3
   Pool:
   - Prefab: {fileID: 5130948200137111212, guid: da58accda8464154eb07c37fa0f2bc1d, type: 3}
-    Stats: {fileID: 11400000, guid: 561b5e2cbe85bf5439cda17ac8cade4e, type: 2}
-    Weight: 1
-  - Prefab: {fileID: 5130948200137111212, guid: 1f0d58d93d9ec034cb81dea60716578f, type: 3}
     Stats: {fileID: 11400000, guid: 03dec9a1058264c4092137dc7382f5ad, type: 2}
     Weight: 1
+  - Prefab: {fileID: 5130948200137111212, guid: 1f0d58d93d9ec034cb81dea60716578f, type: 3}
+    Stats: {fileID: 11400000, guid: 20d8c745dae620b4a84bb83fb8895ee6, type: 2}
+    Weight: 1
   - Prefab: {fileID: 5130948200137111212, guid: 5f95acb7b88c8a7469e4f71808e9abf4, type: 3}
-    Stats: {fileID: 11400000, guid: ee15b106a81e70a42a7cd3dc1bcf8ba0, type: 2}
+    Stats: {fileID: 11400000, guid: 3709e307b4cac3e46a1de04c9ec12d07, type: 2}
     Weight: 1
   - Prefab: {fileID: 5130948200137111212, guid: 8fef7b389685e5d479a57633085750d3, type: 3}
-    Stats: {fileID: 11400000, guid: ee15b106a81e70a42a7cd3dc1bcf8ba0, type: 2}
+    Stats: {fileID: 11400000, guid: d0c63d4279125404a8940d7161f0c736, type: 2}
+    Weight: 1
+  - Prefab: {fileID: 5130948200137111212, guid: 8af9d08855924cc48a9aff51b40f6845, type: 3}
+    Stats: {fileID: 11400000, guid: b7d94933566cba247bcb16935f8eba9d, type: 2}
     Weight: 1

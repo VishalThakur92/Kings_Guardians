@@ -111,6 +111,12 @@ namespace KingGuardians.Core
                 // Attack
                 var atk = unitGo.GetComponent<KingGuardians.Units.UnitAttack>();
                 if (atk != null) atk.ApplyAttackStats(card.UnitStats.DamagePerHit, card.UnitStats.AttackInterval);
+
+                //Domain
+                var desc = unitGo.GetComponent<KingGuardians.Units.UnitDescriptor>();
+                if (desc == null) desc = unitGo.AddComponent<KingGuardians.Units.UnitDescriptor>();
+                desc.Apply(card.UnitStats.Domain, card.UnitStats.CanTarget);
+
             }
 
             return true;

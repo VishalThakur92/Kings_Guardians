@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18707d44da7b4d48a0c2e4e48040cce, type: 3}
+  m_Name: Card_TankA
+  m_EditorClassIdentifier: 
+  UnitStats: {fileID: 11400000, guid: 03dec9a1058264c4092137dc7382f5ad, type: 2}
+  DisplayName: Tank A
+  Icon: {fileID: -5630724708811247932, guid: abce82bf1a147a942bf82bbc48c683ee, type: 3}
+  EnergyCost: 4
+  SpawnPrefab: {fileID: 5130948200137111212, guid: da58accda8464154eb07c37fa0f2bc1d, type: 3}

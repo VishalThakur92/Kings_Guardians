@@ -18,5 +18,12 @@ namespace KingGuardians.Units
         [Header("Attack")]
         [Min(0)] public int DamagePerHit = 25;
         [Min(0.05f)] public float AttackInterval = 0.75f;
+
+        [Header("Targeting")]
+        public UnitDomain Domain = UnitDomain.Ground;
+
+        [Tooltip("What this unit can attack.")]
+        public TargetMask CanTarget = TargetMask.Ground;
+
     }
 }

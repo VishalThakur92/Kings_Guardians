@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18707d44da7b4d48a0c2e4e48040cce, type: 3}
+  m_Name: Card_DPSB
+  m_EditorClassIdentifier: 
+  UnitStats: {fileID: 11400000, guid: d0c63d4279125404a8940d7161f0c736, type: 2}
+  DisplayName: DPS B
+  Icon: {fileID: -25300781324611178, guid: 4a18a4afbed574545acbe943e0052fdc, type: 3}
+  EnergyCost: 4
+  SpawnPrefab: {fileID: 5130948200137111212, guid: 8fef7b389685e5d479a57633085750d3, type: 3}

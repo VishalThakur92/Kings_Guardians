@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HandSize: 4
   Cards:
-  - {fileID: 11400000, guid: 93bae561b3d06cd4f8b574d28352481a, type: 2}
-  - {fileID: 11400000, guid: 08686ecaaddde554088bcb18d7ef100f, type: 2}
-  - {fileID: 11400000, guid: f0e4df679bc44354aaf28c6f8a9410f8, type: 2}
-  - {fileID: 11400000, guid: ee391b65f4de3214f81b7957a94515dd, type: 2}
+  - {fileID: 11400000, guid: febf2fdfe12590747a51fcc6b78b3f92, type: 2}
+  - {fileID: 11400000, guid: 870c6973190bb7b42a4c8c1786a5e0a4, type: 2}
+  - {fileID: 11400000, guid: aeaf10115614aad44a93d438246486e6, type: 2}
+  - {fileID: 11400000, guid: da434ea553b401a4ebcc6eb3285607dd, type: 2}
+  - {fileID: 11400000, guid: 9694aaafef7b1cd449355a8da6e4ec9e, type: 2}
+  - {fileID: 11400000, guid: ce61141279d6f204dafaf872ee463b1f, type: 2}
