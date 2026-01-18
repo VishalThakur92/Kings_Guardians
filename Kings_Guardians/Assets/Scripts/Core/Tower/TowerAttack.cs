@@ -58,7 +58,16 @@ namespace KingGuardians.Towers
             if (target == null)
                 return;
 
-            target.TakeDamage(damagePerHit);
+            //target.TakeDamage(damagePerHit);
+
+            var dq = Combat.DamageQueue.Instance;
+
+            if (dq != null) 
+                dq.Enqueue(target, damagePerHit);
+            else 
+                target.TakeDamage(damagePerHit);
+
+
             _nextShotTime = Time.time + attackInterval;
         }
 

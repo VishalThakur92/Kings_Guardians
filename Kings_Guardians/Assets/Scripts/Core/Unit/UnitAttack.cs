@@ -1,13 +1,13 @@
 using UnityEngine;
 using KingGuardians.Combat;
-using KingGuardians.Towers;
 
 namespace KingGuardians.Units
 {
     /// <summary>
     /// MVP attack logic:
-    /// - When given a target (TowerHealth), deals damage every cooldown interval.
-    /// - No animations yet; purely logical.
+    /// - When given a target, schedules damage at fixed intervals.
+    /// - IMPORTANT: Damage is ENQUEUED into DamageQueue, then applied in LateUpdate,
+    ///   ensuring fair simultaneous resolution (no update-order bias).
     /// </summary>
     public sealed class UnitAttack : MonoBehaviour
     {
@@ -20,10 +20,13 @@ namespace KingGuardians.Units
         private IDamageable _target;
         private float _nextAttackTime;
 
+        /// <summary>
+        /// Called by UnitTargeter when unit engages something.
+        /// </summary>
         public void SetTarget(IDamageable target)
         {
             _target = target;
-            _nextAttackTime = Time.time; // hit immediately on engage
+            _nextAttackTime = Time.time; // hit immediately when in range
         }
 
         public void ClearTarget()
@@ -32,7 +35,7 @@ namespace KingGuardians.Units
         }
 
         /// <summary>
-        /// Applies combat values from stats.
+        /// Applies combat values from stats (used by card/unit definitions).
         /// </summary>
         public void ApplyAttackStats(int damage, float interval)
         {
@@ -40,16 +43,28 @@ namespace KingGuardians.Units
             attackInterval = Mathf.Max(0.05f, interval);
         }
 
-
         private void Update()
         {
-            if (_target == null || !_target.IsAlive) return;
+            if (_target == null) return;
+            if (!_target.IsAlive) return;
 
-            if (Time.time >= _nextAttackTime)
+            if (Time.time < _nextAttackTime)
+                return;
+
+            // IMPORTANT:
+            // Do not call TakeDamage directly. Enqueue for end-of-frame resolution.
+            var dq = DamageQueue.Instance;
+            if (dq != null)
             {
-                _target.TakeDamage(damagePerHit);
-                _nextAttackTime = Time.time + attackInterval;
+                dq.Enqueue(_target, damagePerHit);
             }
+            else
+            {
+                // Fallback: if DamageQueue isn't present, apply immediately (not recommended).
+                _target.TakeDamage(damagePerHit);
+            }
+
+            _nextAttackTime = Time.time + attackInterval;
         }
     }
 }
