@@ -3,12 +3,16 @@ using UnityEngine;
 namespace KingGuardians.VFX
 {
     /// <summary>
-    /// Minimal one-shot spell VFX:
-    /// - Scales a SpriteRenderer to match the spell radius (diameter = radius * 2)
-    /// - Fades out over duration
-    /// - Destroys itself at the end
+    /// Minimal, radius-accurate spell VFX.
     ///
-    /// This keeps VFX independent from spell logic (SOLID).
+    /// RULES:
+    /// - Visual size MUST exactly match spell damage radius.
+    /// - No scale animation, no exaggeration.
+    /// - Only fades out over time.
+    ///
+    /// Assumption:
+    /// - The sprite used is authored at ~1 world unit size.
+    ///   (Adjust prefab scale ONCE if needed; do not compensate in code.)
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class OneShotSpellVfx : MonoBehaviour
@@ -16,12 +20,10 @@ namespace KingGuardians.VFX
         [Header("Visual")]
         [SerializeField] private SpriteRenderer spriteRenderer;
 
-        [Header("Timing")]
+        [Header("Lifetime")]
         [Tooltip("How long the VFX stays visible (seconds).")]
-        [Min(0.05f)][SerializeField] private float duration = 0.35f;
-
-        [Tooltip("Optional: small scale pop at start.")]
-        [Min(0f)][SerializeField] private float startScaleMultiplier = 0.9f;
+        [Min(0.05f)]
+        [SerializeField] private float duration = 0.35f;
 
         private float _time;
         private Color _baseColor;
@@ -36,37 +38,32 @@ namespace KingGuardians.VFX
         }
 
         /// <summary>
-        /// Initializes the VFX size based on spell radius (world units).
-        /// Should be called immediately after instantiate.
+        /// Initializes the VFX size so that:
+        /// diameter in world units == spell.Radius * 2
         /// </summary>
         public void InitRadius(float radius)
         {
-            // Diameter in world units
+            // World-space diameter
             float diameter = Mathf.Max(0.01f, radius * 2f);
 
-            // We assume the sprite is a unit circle-ish sprite (approx 1 world unit when scale = 1).
-            // If your sprite pixels-per-unit differs, adjust prefab scale once and keep code unchanged.
-            transform.localScale = Vector3.one * (diameter * startScaleMultiplier);
+            // IMPORTANT:
+            // We apply the scale ONCE and never touch it again.
+            transform.localScale = Vector3.one * diameter;
         }
 
         private void Update()
         {
             _time += Time.deltaTime;
 
-            // Normalized progress 0..1
             float t = Mathf.Clamp01(_time / duration);
 
-            // Fade alpha from 1 -> 0
+            // Fade alpha only — no scaling, no movement
             if (spriteRenderer != null)
             {
-                var c = _baseColor;
+                Color c = _baseColor;
                 c.a = Mathf.Lerp(_baseColor.a, 0f, t);
                 spriteRenderer.color = c;
             }
-
-            // Slight scale-up as it fades (optional, gives "impact ring" feel)
-            float scaleUp = Mathf.Lerp(1f, 1.1f, t);
-            transform.localScale *= scaleUp;
 
             if (_time >= duration)
                 Destroy(gameObject);

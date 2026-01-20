@@ -16,4 +16,5 @@ MonoBehaviour:
   Radius: 1.5
   Damage: 40
   AffectUnits: 1
-  AffectTowers: 0
+  AffectTowers: 1
+  CastVfxPrefab: {fileID: 5323938573910900266, guid: 8f5071a79486e384b84a7d81ea876209, type: 3}

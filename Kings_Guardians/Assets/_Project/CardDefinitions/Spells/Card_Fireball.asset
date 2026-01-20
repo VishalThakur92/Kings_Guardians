@@ -15,7 +15,7 @@ MonoBehaviour:
   UnitStats: {fileID: 0}
   DisplayName: Card_Fireball
   Icon: {fileID: -4134337327994304922, guid: 298a8f9e7a4e8d145857f3ce1f14043f, type: 3}
-  EnergyCost: 4
-  SpawnPrefab: {fileID: 0}
+  EnergyCost: 1
+  SpawnPrefab: {fileID: 5323938573910900266, guid: 8f5071a79486e384b84a7d81ea876209, type: 3}
   Kind: 1
   Spell: {fileID: 11400000, guid: ff876f0490a551249a9361beaf9af46e, type: 2}

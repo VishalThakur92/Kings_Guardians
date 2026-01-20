@@ -15,5 +15,7 @@ MonoBehaviour:
   UnitStats: {fileID: 11400000, guid: d0c63d4279125404a8940d7161f0c736, type: 2}
   DisplayName: DPS B
   Icon: {fileID: -25300781324611178, guid: 4a18a4afbed574545acbe943e0052fdc, type: 3}
-  EnergyCost: 4
+  EnergyCost: 1
   SpawnPrefab: {fileID: 5130948200137111212, guid: 8fef7b389685e5d479a57633085750d3, type: 3}
+  Kind: 0
+  Spell: {fileID: 0}

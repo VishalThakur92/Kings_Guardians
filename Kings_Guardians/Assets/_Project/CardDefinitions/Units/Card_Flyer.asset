@@ -15,5 +15,7 @@ MonoBehaviour:
   UnitStats: {fileID: 11400000, guid: b7d94933566cba247bcb16935f8eba9d, type: 2}
   DisplayName: Flyer
   Icon: {fileID: 27508875935011021, guid: dec0a44e59ab6974ca5f4053ac5f44cf, type: 3}
-  EnergyCost: 4
+  EnergyCost: 1
   SpawnPrefab: {fileID: 5130948200137111212, guid: 8af9d08855924cc48a9aff51b40f6845, type: 3}
+  Kind: 0
+  Spell: {fileID: 0}

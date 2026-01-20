@@ -15,5 +15,7 @@ MonoBehaviour:
   UnitStats: {fileID: 11400000, guid: 20d8c745dae620b4a84bb83fb8895ee6, type: 2}
   DisplayName: Caster
   Icon: {fileID: 8218771907821357143, guid: 6a5dedcc827a02944b868453c747d610, type: 3}
-  EnergyCost: 4
+  EnergyCost: 1
   SpawnPrefab: {fileID: 5130948200137111212, guid: 1f0d58d93d9ec034cb81dea60716578f, type: 3}
+  Kind: 0
+  Spell: {fileID: 0}

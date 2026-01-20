@@ -15,8 +15,8 @@ MonoBehaviour:
   HandSize: 4
   Cards:
   - {fileID: 11400000, guid: febf2fdfe12590747a51fcc6b78b3f92, type: 2}
-  - {fileID: 11400000, guid: fef867f991a22114688f54cc729763a9, type: 2}
   - {fileID: 11400000, guid: 870c6973190bb7b42a4c8c1786a5e0a4, type: 2}
+  - {fileID: 11400000, guid: fef867f991a22114688f54cc729763a9, type: 2}
   - {fileID: 11400000, guid: aeaf10115614aad44a93d438246486e6, type: 2}
   - {fileID: 11400000, guid: da434ea553b401a4ebcc6eb3285607dd, type: 2}
   - {fileID: 11400000, guid: 9694aaafef7b1cd449355a8da6e4ec9e, type: 2}
