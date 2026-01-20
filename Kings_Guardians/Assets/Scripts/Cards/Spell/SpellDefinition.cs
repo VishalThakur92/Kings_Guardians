@@ -20,6 +20,11 @@ namespace KingGuardians.Cards
         [Header("Targets")]
         public bool AffectUnits = true;
         public bool AffectTowers = false; // keep false for MVP unless you want it
+
+        [Header("VFX (MVP)")]
+        [Tooltip("Optional one-shot VFX prefab spawned at cast position.")]
+        public GameObject CastVfxPrefab;
+
     }
 
     public enum SpellCastRule
