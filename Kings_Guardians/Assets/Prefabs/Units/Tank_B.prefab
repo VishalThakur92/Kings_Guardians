@@ -287,8 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6003d64dac2145942aadfb92b6a7421d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  meleeBehavior: {fileID: 7622846947336839661}
-  rangedBehavior: {fileID: 7622846947336839661}
+  melee: {fileID: 2418404032886254654}
+  ranged: {fileID: 0}
 --- !u!1001 &3875048308876944826
 PrefabInstance:
   m_ObjectHideFlags: 0
