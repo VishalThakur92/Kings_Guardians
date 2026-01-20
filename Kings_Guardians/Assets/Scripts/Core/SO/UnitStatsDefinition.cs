@@ -19,6 +19,11 @@ namespace KingGuardians.Units
         [Min(0)] public int DamagePerHit = 25;
         [Min(0.05f)] public float AttackInterval = 0.75f;
 
+        [Header("Attack Range (MVP)")]
+        [Tooltip("World units. Melee ~0.6–0.9, Ranged ~2.5–4.0.")]
+        [Min(0.1f)] public float AttackRange = 0.8f;
+
+
         [Header("Targeting")]
         public UnitDomain Domain = UnitDomain.Ground;
 
