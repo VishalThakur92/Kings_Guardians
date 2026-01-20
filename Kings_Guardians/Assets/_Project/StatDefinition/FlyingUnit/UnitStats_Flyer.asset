@@ -16,5 +16,6 @@ MonoBehaviour:
   MoveSpeed: 2.6
   DamagePerHit: 20
   AttackInterval: 0.7
+  AttackRange: 2.5
   Domain: 1
   CanTarget: -1

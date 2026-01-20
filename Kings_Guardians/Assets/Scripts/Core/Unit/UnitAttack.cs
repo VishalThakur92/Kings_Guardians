@@ -90,6 +90,23 @@ namespace KingGuardians.Units
             attackInterval = Mathf.Max(0.05f, _baseAttackInterval / _attackSpeedMultiplier);
         }
 
+        /// <summary>
+        /// Returns true if the current target exists and is within attack range.
+        /// Used by UnitTargeter to decide whether to stop or keep moving.
+        /// </summary>
+        public bool IsTargetInRange()
+        {
+            if (_target == null || !_target.IsAlive) return false;
+
+            // If we cannot check distance (no transform), assume in range.
+            if (_targetTransform == null) return true;
+
+            float distSq = (_targetTransform.position - transform.position).sqrMagnitude;
+            float rangeSq = attackRange * attackRange;
+            return distSq <= rangeSq;
+        }
+
+
         private void Update()
         {
             if (_target == null) return;

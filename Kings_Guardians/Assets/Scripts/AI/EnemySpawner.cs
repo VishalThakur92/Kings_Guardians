@@ -1,6 +1,7 @@
-using UnityEngine;
 using KingGuardians.Core;
 using KingGuardians.Units;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEngine;
 
 namespace KingGuardians.AI
 {
@@ -86,7 +87,10 @@ namespace KingGuardians.AI
             // Ensure attack exists and apply stats
             var attack = go.GetComponent<UnitAttack>();
             if (attack == null) attack = go.AddComponent<UnitAttack>();
-            if (entry.Stats != null) attack.ApplyAttackStats(entry.Stats.DamagePerHit, entry.Stats.AttackInterval);
+            if (entry.Stats != null) { 
+                attack.ApplyAttackStats(entry.Stats.DamagePerHit, entry.Stats.AttackInterval);
+                attack.ApplyAttackRange(entry.Stats.AttackRange); 
+            }
 
             // Ensure motor exists, apply speed and move DOWN
             var motor = go.GetComponent<UnitMotor>();

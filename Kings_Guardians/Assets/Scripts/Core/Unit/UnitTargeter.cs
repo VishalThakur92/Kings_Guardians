@@ -67,32 +67,31 @@ namespace KingGuardians.Units
             // Decide best target based on priority rules.
             IDamageable best = ChooseBestTarget();
 
-            // If target changed, update motor + attack.
+            // If target changed, update attack target.
             if (!ReferenceEquals(best, _currentTarget))
             {
                 _currentTarget = best;
 
                 if (_currentTarget == null)
                 {
-                    // Nothing to fight -> keep moving.
-                    if (_melee != null) _melee.ClearTarget();
-                    if (_ranged != null) _ranged.ClearTarget();
+                    // Nothing to fight -> move forward.
+                    _melee.ClearTarget();
                     _motor.Resume();
+                    return;
                 }
+
+                // Set target, but do NOT stop yet.
+                // We stop only when we're actually within attack range.
+                _melee.SetTarget(_currentTarget);
+            }
+
+            // If we have a target, decide whether to stop or move based on attack range.
+            if (_currentTarget != null)
+            {
+                if (_melee.IsTargetInRange())
+                    _motor.Stop();     // In range -> hold position and attack
                 else
-                {
-                    // Engage -> stop and attack.
-                    _motor.Stop();
-                    // Prefer ranged if available, else melee
-                    if (_ranged != null)
-                    {
-                        _ranged.SetTarget(_currentTarget, GetTargetTransform(_currentTarget));
-                    }
-                    else if (_melee != null)
-                    {
-                        _melee.SetTarget(_currentTarget);
-                    }
-                }
+                    _motor.Resume();   // Not in range -> keep moving until in range
             }
         }
 
