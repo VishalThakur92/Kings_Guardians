@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1880514435558789333
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5917840696402044671}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5917840696402044671
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880514435558789333}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2233683109514970058}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3122935072856228450
 GameObject:
   m_ObjectHideFlags: 0
@@ -76,7 +107,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 27508875935011021, guid: dec0a44e59ab6974ca5f4053ac5f44cf, type: 3}
+  m_Sprite: {fileID: 8218771907821357143, guid: 6a5dedcc827a02944b868453c747d610, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -103,9 +134,10 @@ GameObject:
   - component: {fileID: 3612627774657475374}
   - component: {fileID: 1063759156911198281}
   - component: {fileID: 9128112301403710956}
-  - component: {fileID: 800297724497897538}
+  - component: {fileID: -3976771575671056960}
+  - component: {fileID: 6691819879710575548}
   m_Layer: 0
-  m_Name: Flyer
+  m_Name: Caster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,6 +158,7 @@ Transform:
   m_Children:
   - {fileID: 4109120280089975267}
   - {fileID: 6757091095676967504}
+  - {fileID: 5917840696402044671}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!58 &3918449685349139567
@@ -163,7 +196,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 1
+  m_Radius: 3
 --- !u!50 &-6112164611923495527
 Rigidbody2D:
   serializedVersion: 5
@@ -259,7 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   team: 0
---- !u!114 &800297724497897538
+--- !u!114 &-3976771575671056960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -271,8 +304,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6de7355728222a4b84ae03f1a36f2a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  domain: 1
+  domain: 0
   canTarget: -1
+--- !u!114 &6691819879710575548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130948200137111212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75962cad28cfb6049ab79ea9e3669c6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePerHit: 20
+  attackInterval: 0.8
+  projectilePrefab: {fileID: 531715705040837606, guid: ccbcc8294d6f964458fd293bfa00b925, type: 3}
+  firePoint: {fileID: 5917840696402044671}
 --- !u!1001 &3875048308876944826
 PrefabInstance:
   m_ObjectHideFlags: 0

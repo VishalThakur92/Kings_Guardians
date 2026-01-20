@@ -33,7 +33,8 @@ namespace KingGuardians.Units
         [SerializeField] private bool prioritizeUnitsOverTowers = true;
 
         private UnitMotor _motor;
-        private UnitAttack _attack;
+        private UnitAttack _melee;
+        private RangedAttack _ranged;
 
         // Tracking who is currently inside this unit's trigger range.
         private readonly List<UnitHealth> _enemyUnitsInRange = new List<UnitHealth>(8);
@@ -45,7 +46,8 @@ namespace KingGuardians.Units
         private void Awake()
         {
             _motor = GetComponent<UnitMotor>();
-            _attack = GetComponent<UnitAttack>();
+            _melee = GetComponent<UnitAttack>();
+            _ranged = GetComponent<RangedAttack>();
         }
 
         /// <summary>
@@ -73,16 +75,34 @@ namespace KingGuardians.Units
                 if (_currentTarget == null)
                 {
                     // Nothing to fight -> keep moving.
-                    _attack.ClearTarget();
+                    if (_melee != null) _melee.ClearTarget();
+                    if (_ranged != null) _ranged.ClearTarget();
                     _motor.Resume();
                 }
                 else
                 {
                     // Engage -> stop and attack.
                     _motor.Stop();
-                    _attack.SetTarget(_currentTarget);
+                    // Prefer ranged if available, else melee
+                    if (_ranged != null)
+                    {
+                        _ranged.SetTarget(_currentTarget, GetTargetTransform(_currentTarget));
+                    }
+                    else if (_melee != null)
+                    {
+                        _melee.SetTarget(_currentTarget);
+                    }
                 }
             }
+        }
+
+        private Transform GetTargetTransform(IDamageable target)
+        {
+            // Most of your targets are MonoBehaviours, so we can safely get Transform.
+            if (target is MonoBehaviour mb)
+                return mb.transform;
+
+            return null;
         }
 
         private IDamageable ChooseBestTarget()
