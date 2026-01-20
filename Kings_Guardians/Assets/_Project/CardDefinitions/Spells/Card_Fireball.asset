@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e18707d44da7b4d48a0c2e4e48040cce, type: 3}
+  m_Name: Card_Fireball
+  m_EditorClassIdentifier: 
+  UnitStats: {fileID: 0}
+  DisplayName: Card_Fireball
+  Icon: {fileID: -4134337327994304922, guid: 298a8f9e7a4e8d145857f3ce1f14043f, type: 3}
+  EnergyCost: 4
+  SpawnPrefab: {fileID: 0}
+  Kind: 1
+  Spell: {fileID: 11400000, guid: ff876f0490a551249a9361beaf9af46e, type: 2}

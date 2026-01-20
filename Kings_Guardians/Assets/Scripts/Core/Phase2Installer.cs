@@ -64,6 +64,8 @@ namespace KingGuardians.Core
             // but our UnitSpawner currently instantiates a single prefab. To keep it minimal:
             // Use UnitSpawner only as a generic instantiator; we’ll update it in the next step if needed.
             _spawner = new UnitSpawner(unitsRoot);
+            var spellValidator = new KingGuardians.Combat.SpellValidator(battlefieldConfig);
+            var spellCaster = new KingGuardians.Combat.SpellCaster();
 
             // Build deploy controller
             _deployController = new CardDeploymentController(
@@ -72,7 +74,9 @@ namespace KingGuardians.Core
               _spawner,
               _energy,
               _hand,
-              Camera.main
+              Camera.main,  
+              spellValidator,
+              spellCaster
             );
 
             //initialize each drag slot:

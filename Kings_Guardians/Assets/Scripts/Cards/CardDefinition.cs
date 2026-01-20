@@ -25,5 +25,11 @@ namespace KingGuardians.Cards
 
         [Tooltip("Prefab spawned when this card is deployed (MVP: unit).")]
         public GameObject SpawnPrefab;
+
+        public CardKind Kind = CardKind.Unit;
+
+        [Header("Spell (if Kind = Spell)")]
+        public SpellDefinition Spell;
+
     }
 }

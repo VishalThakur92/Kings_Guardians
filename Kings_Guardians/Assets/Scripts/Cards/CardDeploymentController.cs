@@ -16,6 +16,9 @@ namespace KingGuardians.Core
         private readonly EnergySystem _energy;
         private readonly HandModel _hand;
         private readonly Camera _cam;
+        private readonly Combat.SpellValidator _spellValidator;
+        private readonly Combat.SpellCaster _spellCaster;
+
 
         public CardDeploymentController(
             BattlefieldConfig cfg,
@@ -23,7 +26,9 @@ namespace KingGuardians.Core
             UnitSpawner spawner,
             EnergySystem energy,
             HandModel hand,
-            Camera cam)
+            Camera cam,
+            Combat.SpellValidator spellValidator,
+            Combat.SpellCaster spellCaster)
         {
             _cfg = cfg;
             _validator = validator;
@@ -31,6 +36,8 @@ namespace KingGuardians.Core
             _energy = energy;
             _hand = hand;
             _cam = cam;
+            _spellValidator = spellValidator;
+            _spellCaster = spellCaster;
         }
 
         public void SelectSlot(int slotIndex) => SelectedSlot = slotIndex;
@@ -46,21 +53,36 @@ namespace KingGuardians.Core
             if (SelectedSlot < 0 || _cam == null) return false;
 
             var card = _hand.GetCardAt(SelectedSlot);
-            if (card == null || card.SpawnPrefab == null) return false;
+            if (card == null) return false;
 
-            // Energy check (no spend)
+            // Must have enough energy for either type
             if (!_energy.CanSpend(card.EnergyCost)) return false;
 
             Vector3 w = _cam.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 0f));
             Vector2 worldPos = new Vector2(w.x, w.y);
 
-            // IMPORTANT: For preview, do NOT clamp into deploy zone.
-            // Validate the raw position so the ghost turns red outside the spawnable area.
-            if (!IsInsideArena(worldPos, _cfg)) return false;
-            if (!_validator.IsPlayerDeployAllowed(worldPos)) return false;
+            // UNIT card preview
+            if (card.Kind == KingGuardians.Cards.CardKind.Unit)
+            {
+                if (card.SpawnPrefab == null) return false;
 
-            return true;
+                // Must be inside arena and inside player deploy zone
+                if (!IsInsideArena(worldPos, _cfg)) return false;
+                if (!_validator.IsPlayerDeployAllowed(worldPos)) return false;
+
+                return true;
+            }
+
+            // SPELL card preview
+            if (card.Kind == KingGuardians.Cards.CardKind.Spell)
+            {
+                if (card.Spell == null) return false;
+                return _spellValidator.CanCastAt(card.Spell, worldPos);
+            }
+
+            return false;
         }
+
         private static bool IsInsideArena(Vector2 p, BattlefieldConfig cfg)
         {
             return p.x >= -cfg.HalfArenaWidth && p.x <= cfg.HalfArenaWidth &&
@@ -77,50 +99,54 @@ namespace KingGuardians.Core
             if (SelectedSlot < 0 || _cam == null) return false;
 
             var card = _hand.GetCardAt(SelectedSlot);
-            if (card == null || card.SpawnPrefab == null) return false;
+            if (card == null) return false;
 
             Vector3 w = _cam.ScreenToWorldPoint(new Vector3(screenPos.x, screenPos.y, 0f));
             Vector2 worldPos = new Vector2(w.x, w.y);
 
-            // Validate RAW drop position first (must actually be in the spawnable area)
-            if (!IsInsideArena(worldPos, _cfg)) return false;
-            if (!_validator.IsPlayerDeployAllowed(worldPos)) return false;
+            // Spend energy first only if it will succeed (so validate first).
+            bool valid = CanDeployAtScreen(screenPos);
+            if (!valid) return false;
 
-            // Now it's safe to clamp within arena (safety) and snap to lane.
-            worldPos = BattlefieldMath.ClampToArena(worldPos, _cfg);
-            var snapped = BattlefieldMath.SnapToNearestLane(worldPos, _cfg);
+            // Now spend (authoritative spend point for MVP)
+            if (!_energy.TrySpend(card.EnergyCost)) return false;
 
-            if (!_energy.TrySpend(card.EnergyCost))
-                return false;
-
-            var unitGo = _spawner.Spawn(card.SpawnPrefab, snapped, "P");
-
-            _hand.UseCardAt(SelectedSlot);
-
-            // Apply stats if this is a unit card
-            if (unitGo != null && card.UnitStats != null)
+            if (card.Kind == KingGuardians.Cards.CardKind.Unit)
             {
-                // Health
-                var hp = unitGo.GetComponent<KingGuardians.Units.UnitHealth>();
-                if (hp != null) hp.ApplyMaxHp(card.UnitStats.MaxHp);
+                var snapped = BattlefieldMath.SnapToNearestLane(worldPos, _cfg);
 
-                // Movement
-                var motor = unitGo.GetComponent<KingGuardians.Units.UnitMotor>();
-                if (motor != null) motor.ApplyMoveSpeed(card.UnitStats.MoveSpeed);
-
-                // Attack
-                var atk = unitGo.GetComponent<KingGuardians.Units.UnitAttack>();
-                if (atk != null) atk.ApplyAttackStats(card.UnitStats.DamagePerHit, card.UnitStats.AttackInterval);
-
-                //Domain
-                var desc = unitGo.GetComponent<KingGuardians.Units.UnitDescriptor>();
-                if (desc == null) desc = unitGo.AddComponent<KingGuardians.Units.UnitDescriptor>();
-                desc.Apply(card.UnitStats.Domain, card.UnitStats.CanTarget);
-
+                var unitGo = _spawner.Spawn(card.SpawnPrefab, snapped, "P");
+                // Apply stats (existing logic you already added)
+                ApplyUnitStatsIfAny(unitGo, card);
+            }
+            else if (card.Kind == KingGuardians.Cards.CardKind.Spell)
+            {
+                _spellCaster.Cast(card.Spell, worldPos);
             }
 
+            // Cycle card after successful action
+            _hand.UseCardAt(SelectedSlot);
             return true;
         }
+
+        private void ApplyUnitStatsIfAny(GameObject unitGo, KingGuardians.Cards.CardDefinition card)
+        {
+            if (unitGo == null || card.UnitStats == null) return;
+
+            var hp = unitGo.GetComponent<KingGuardians.Units.UnitHealth>();
+            if (hp != null) hp.ApplyMaxHp(card.UnitStats.MaxHp);
+
+            var motor = unitGo.GetComponent<KingGuardians.Units.UnitMotor>();
+            if (motor != null) motor.ApplyMoveSpeed(card.UnitStats.MoveSpeed);
+
+            var atk = unitGo.GetComponent<KingGuardians.Units.UnitAttack>();
+            if (atk != null) atk.ApplyAttackStats(card.UnitStats.DamagePerHit, card.UnitStats.AttackInterval);
+
+            var desc = unitGo.GetComponent<KingGuardians.Units.UnitDescriptor>();
+            if (desc == null) desc = unitGo.AddComponent<KingGuardians.Units.UnitDescriptor>();
+            desc.Apply(card.UnitStats.Domain, card.UnitStats.CanTarget);
+        }
+
 
 
     }
