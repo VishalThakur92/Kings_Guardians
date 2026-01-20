@@ -187,41 +187,41 @@ namespace KingGuardians.Units
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            // ---- Enemy Unit detection ----
-            // IMPORTANT:
-            // Do NOT depend on UnitDescriptor existing, otherwise units may "ignore" each other
-            // if one side spawns without a descriptor.
-            // Use UnitIdentity for team check, and use UnitDescriptor only for domain filtering when present.
-            if (other.TryGetComponent<UnitIdentity>(out var otherIdentity) &&
-                other.TryGetComponent<UnitHealth>(out var unitHealth))
+            // ---------------------------
+            // 1) Enemy Unit detection
+            // ---------------------------
+            // Use GetComponentInParent so it works even if the collider is on a child object.
+            var otherIdentity = other.GetComponentInParent<UnitIdentity>();
+            var otherHealth = other.GetComponentInParent<UnitHealth>();
+
+            if (otherIdentity != null && otherHealth != null)
             {
                 // Ignore friendly units.
                 if (otherIdentity.Team == team) return;
 
-                // Optional domain check:
-                // If the other unit has a descriptor, respect domain targeting rules.
-                if (other.TryGetComponent<UnitDescriptor>(out var otherDesc))
-                {
-                    if (!CanTargetDomain(otherDesc.Domain))
-                        return;
-                }
-                else
-                {
-                    // If no descriptor exists, treat it as Ground for MVP safety.
-                    if (!CanTargetDomain(UnitDomain.Ground))
-                        return;
-                }
+                // Optional domain check (descriptor may be on parent too).
+                var otherDesc = other.GetComponentInParent<UnitDescriptor>();
+                var domain = otherDesc != null ? otherDesc.Domain : UnitDomain.Ground;
 
-                if (!_enemyUnitsInRange.Contains(unitHealth))
-                    _enemyUnitsInRange.Add(unitHealth);
+                if (!CanTargetDomain(domain))
+                    return;
+
+                if (!_enemyUnitsInRange.Contains(otherHealth))
+                    _enemyUnitsInRange.Add(otherHealth);
 
                 return;
             }
 
 
-            // ---- Enemy Tower detection ----
-            if (other.TryGetComponent<TowerAnchor>(out var towerAnchor) &&
-                other.TryGetComponent<TowerHealth>(out var towerHealth))
+            // ---------------------------
+            // 2) Enemy Tower detection
+            // ---------------------------
+            // IMPORTANT: Colliders are often placed on child objects.
+            // If we only use TryGetComponent on the collider object, we may never find TowerHealth/TowerAnchor.
+            var towerAnchor = other.GetComponentInParent<TowerAnchor>();
+            var towerHealth = other.GetComponentInParent<TowerHealth>();
+
+            if (towerAnchor != null && towerHealth != null)
             {
                 // Ignore friendly towers.
                 if (towerAnchor.Team == team) return;
@@ -230,20 +230,17 @@ namespace KingGuardians.Units
                     _enemyTowersInRange.Add(towerHealth);
             }
         }
-
         private void OnTriggerExit2D(Collider2D other)
         {
-            // Remove enemy unit if leaving range
-            if (other.TryGetComponent<UnitHealth>(out var unitHealth))
-            {
+            // Remove enemy unit if leaving range (parent-safe)
+            var unitHealth = other.GetComponentInParent<UnitHealth>();
+            if (unitHealth != null)
                 _enemyUnitsInRange.Remove(unitHealth);
-            }
 
-            // Remove tower if leaving range
-            if (other.TryGetComponent<TowerHealth>(out var towerHealth))
-            {
+            // Remove tower if leaving range (parent-safe)
+            var towerHealth = other.GetComponentInParent<TowerHealth>();
+            if (towerHealth != null)
                 _enemyTowersInRange.Remove(towerHealth);
-            }
         }
 
         private bool CanTargetDomain(UnitDomain targetDomain)
