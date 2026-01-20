@@ -100,10 +100,11 @@ GameObject:
   - component: {fileID: -6112164611923495527}
   - component: {fileID: 7622846947336839661}
   - component: {fileID: 4866376194155307089}
-  - component: {fileID: 3612627774657475374}
   - component: {fileID: 1063759156911198281}
   - component: {fileID: 9128112301403710956}
   - component: {fileID: 2640891263857803906}
+  - component: {fileID: 4777407042367635294}
+  - component: {fileID: 5921024004181976831}
   m_Layer: 0
   m_Name: DPS_A
   m_TagString: Untagged
@@ -219,21 +220,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   team: 0
   prioritizeUnitsOverTowers: 1
---- !u!114 &3612627774657475374
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5130948200137111212}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf6ab497313f3ff42b00582294593077, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damagePerHit: 25
-  attackInterval: 0.75
-  attackRange: 2
 --- !u!114 &1063759156911198281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -274,6 +260,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   domain: 0
   canTarget: 1
+--- !u!114 &4777407042367635294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130948200137111212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a023b23677f5f14c90214ee8c13e5ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damagePerHit: 25
+  attackInterval: 0.75
+  attackRange: 0.9
+--- !u!114 &5921024004181976831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5130948200137111212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6003d64dac2145942aadfb92b6a7421d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeBehavior: {fileID: 7622846947336839661}
+  rangedBehavior: {fileID: 7622846947336839661}
 --- !u!1001 &3875048308876944826
 PrefabInstance:
   m_ObjectHideFlags: 0

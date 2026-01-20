@@ -85,11 +85,10 @@ namespace KingGuardians.AI
             if (entry.Stats != null) health.ApplyMaxHp(entry.Stats.MaxHp);
 
             // Ensure attack exists and apply stats
-            var attack = go.GetComponent<UnitAttack>();
-            if (attack == null) attack = go.AddComponent<UnitAttack>();
+            var attack = go.GetComponent<UnitAttackController>();
+            if (attack == null) attack = go.AddComponent<UnitAttackController>();
             if (entry.Stats != null) { 
-                attack.ApplyAttackStats(entry.Stats.DamagePerHit, entry.Stats.AttackInterval);
-                attack.ApplyAttackRange(entry.Stats.AttackRange); 
+                attack.ApplyStats(entry.Stats.DamagePerHit, entry.Stats.AttackInterval , entry.Stats.AttackRange);
             }
 
             // Ensure motor exists, apply speed and move DOWN

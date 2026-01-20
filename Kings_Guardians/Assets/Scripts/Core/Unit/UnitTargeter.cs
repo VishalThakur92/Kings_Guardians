@@ -22,7 +22,6 @@ namespace KingGuardians.Units
     /// - Towers must have Trigger colliders (your spawner already ensures this).
     /// </summary>
     [RequireComponent(typeof(UnitMotor))]
-    [RequireComponent(typeof(UnitAttack))]
     public sealed class UnitTargeter : MonoBehaviour
     {
         [Header("Identity")]
@@ -32,9 +31,9 @@ namespace KingGuardians.Units
         [Tooltip("If true, unit prioritizes enemy units over towers (recommended).")]
         [SerializeField] private bool prioritizeUnitsOverTowers = true;
 
-        private UnitMotor _motor;
-        private UnitAttack _melee;
-        private RangedAttack _ranged;
+        private UnitMotor _motor; 
+        private UnitAttackController _attack;
+
 
         // Tracking who is currently inside this unit's trigger range.
         private readonly List<UnitHealth> _enemyUnitsInRange = new List<UnitHealth>(8);
@@ -46,8 +45,7 @@ namespace KingGuardians.Units
         private void Awake()
         {
             _motor = GetComponent<UnitMotor>();
-            _melee = GetComponent<UnitAttack>();
-            _ranged = GetComponent<RangedAttack>();
+            _attack = GetComponent<UnitAttackController>();
         }
 
         /// <summary>
@@ -74,24 +72,20 @@ namespace KingGuardians.Units
 
                 if (_currentTarget == null)
                 {
-                    // Nothing to fight -> move forward.
-                    _melee.ClearTarget();
+                    _attack.ClearTarget();
                     _motor.Resume();
                     return;
                 }
 
-                // Set target, but do NOT stop yet.
-                // We stop only when we're actually within attack range.
-                _melee.SetTarget(_currentTarget);
+                _attack.SetTarget(_currentTarget);
             }
 
-            // If we have a target, decide whether to stop or move based on attack range.
             if (_currentTarget != null)
             {
-                if (_melee.IsTargetInRange())
-                    _motor.Stop();     // In range -> hold position and attack
+                if (_attack.IsTargetInRange())
+                    _motor.Stop();
                 else
-                    _motor.Resume();   // Not in range -> keep moving until in range
+                    _motor.Resume();
             }
         }
 
@@ -194,21 +188,36 @@ namespace KingGuardians.Units
         private void OnTriggerEnter2D(Collider2D other)
         {
             // ---- Enemy Unit detection ----
-            if (other.TryGetComponent<UnitDescriptor>(out var otherDesc) &&
+            // IMPORTANT:
+            // Do NOT depend on UnitDescriptor existing, otherwise units may "ignore" each other
+            // if one side spawns without a descriptor.
+            // Use UnitIdentity for team check, and use UnitDescriptor only for domain filtering when present.
+            if (other.TryGetComponent<UnitIdentity>(out var otherIdentity) &&
                 other.TryGetComponent<UnitHealth>(out var unitHealth))
             {
                 // Ignore friendly units.
-                if (otherDesc.Team == team) return;
+                if (otherIdentity.Team == team) return;
 
-                // Check if THIS unit is allowed to target the other unit's domain.
-                if (!CanTargetDomain(otherDesc.Domain))
-                    return;
+                // Optional domain check:
+                // If the other unit has a descriptor, respect domain targeting rules.
+                if (other.TryGetComponent<UnitDescriptor>(out var otherDesc))
+                {
+                    if (!CanTargetDomain(otherDesc.Domain))
+                        return;
+                }
+                else
+                {
+                    // If no descriptor exists, treat it as Ground for MVP safety.
+                    if (!CanTargetDomain(UnitDomain.Ground))
+                        return;
+                }
 
                 if (!_enemyUnitsInRange.Contains(unitHealth))
                     _enemyUnitsInRange.Add(unitHealth);
 
                 return;
             }
+
 
             // ---- Enemy Tower detection ----
             if (other.TryGetComponent<TowerAnchor>(out var towerAnchor) &&
@@ -248,6 +257,16 @@ namespace KingGuardians.Units
 
             return false;
         }
+
+        private void LateUpdate()
+        {
+            // Let attack behavior tick independently
+
+            if (_attack) {
+                _attack.Tick(Time.deltaTime);
+            }
+        }
+
 
     }
 }

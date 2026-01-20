@@ -1,5 +1,6 @@
 ﻿using KingGuardians.Cards;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEditor;
 using UnityEngine;
 
 namespace KingGuardians.Core
@@ -140,11 +141,13 @@ namespace KingGuardians.Core
             var motor = unitGo.GetComponent<KingGuardians.Units.UnitMotor>();
             if (motor != null) motor.ApplyMoveSpeed(card.UnitStats.MoveSpeed);
 
-            var atk = unitGo.GetComponent<KingGuardians.Units.UnitAttack>();
+            var atk = unitGo.GetComponent<KingGuardians.Units.UnitAttackController>();
             if (atk != null)
             {
-                atk.ApplyAttackStats(card.UnitStats.DamagePerHit, card.UnitStats.AttackInterval);
-                atk.ApplyAttackRange(card.UnitStats.AttackRange);
+                atk.ApplyStats(card.UnitStats.DamagePerHit, card.UnitStats.AttackInterval , card.UnitStats.AttackRange);
+
+                // Simple rule: ranged if attack range is large
+                atk.SetIsRanged(card.UnitStats.AttackRange >= 2.0f);
             }
 
             var desc = unitGo.GetComponent<KingGuardians.Units.UnitDescriptor>();
